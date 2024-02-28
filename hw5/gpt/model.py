@@ -73,6 +73,7 @@ class CausalSelfAttention(nn.Module):
         # causal self-attention; Self-attend: (B, n_head, T, n_embd / n_head) x (B, n_head, n_embd / n_head, T) -> (B, n_head, T, T)
         # calculate the scaled dot-product attention with causal mask, name the attention matrix as `att`
         # step 1: q @ k^T / sqrt(d_k), where d_k is the head hidden dimension (n_embd / n_head)
+        att = q @ k.transpose(-2, -1) / math.sqrt(k.size(-1))
 
         # step 2: apply the causal mask to the attention matrix
         # the masked out entries in att should have the value of float('-inf')
@@ -81,6 +82,8 @@ class CausalSelfAttention(nn.Module):
         # - don't forget to truncate the mask to the actual sequence length (T)
         # - to apply the mask, one possible way is the `torch.Tensor.masked_fill` method
         # - - for this, you can obtain the boolean mask by element-wise comparison of the causal mask with 0
+        causal_mask = self.causal_mask[:, :, :T, :T]
+        att = att.masked_fill(self.causal_mask == 0, float('-inf'))
 
         # step 3: apply the softmax function to the masked attention matrix
         # hint: you can use the `F.softmax` function
