@@ -87,10 +87,14 @@ class CausalSelfAttention(nn.Module):
 
         # step 3: apply the softmax function to the masked attention matrix
         # hint: you can use the `F.softmax` function
+        att = F.softmax(att, dim=-1)
 
         # step 4: apply the attention dropout (self.attn_dropout) to the attention matrix
+        att = self.attn_dropout(att)
 
         # step 5: multiply the attention matrix with value vectors
+        y = torch.matmul(att, v)
+        
 
         # your code ends here
 
