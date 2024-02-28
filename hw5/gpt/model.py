@@ -41,7 +41,6 @@ class CausalSelfAttention(nn.Module):
         #   Name the matrix `causal_mask`
         # Hint: you can check torch.tril for creating the matrix with the help of torch.ones.
         casual_mask = torch.tril(torch.ones(config.block_size, config.block_size))
-        
         # your code ends here
 
         # expand the mask for the batch and head dimensions
@@ -68,7 +67,8 @@ class CausalSelfAttention(nn.Module):
         # we provide the implementation for the key projections as an example
         k = k.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) # (B, n_head, T, n_embd / n_head)
         # similarly, implement the query and value projections
-        raise NotImplementedError
+        q = q.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) 
+        v = v.view(B, T, self.n_head, C // self.n_head).transpose(1, 2) 
 
         # causal self-attention; Self-attend: (B, n_head, T, n_embd / n_head) x (B, n_head, n_embd / n_head, T) -> (B, n_head, T, T)
         # calculate the scaled dot-product attention with causal mask, name the attention matrix as `att`
