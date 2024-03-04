@@ -1,6 +1,5 @@
 #!/bin/bash
 
-#SBATCH -A cs601471
 #SBATCH --partition=mig_class
 #SBATCH --gres=gpu:1
 #SBATCH --nodes=1
@@ -10,8 +9,9 @@
 #SBATCH --output=slurm-%j.out
 #SBATCH --mem=16G
 
+module load anaconda
 source ~/.bashrc
-conda activate ssm_hw5 # activate the Python environment
+conda activate nlp # activate the Python environment
 
 # runs your code
 python -u main.py
